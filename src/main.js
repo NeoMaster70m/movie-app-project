@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './assets/CSS/index.css'
-import router from './router'
+import router from './routes.js'
+import '@fortawesome/fontawesome-free/css/all.css';
 
 Vue.config.productionTip = false
 
