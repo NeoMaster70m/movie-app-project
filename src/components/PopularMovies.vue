@@ -1,5 +1,5 @@
 <template lang="">
-    <div class="mx-auto w-9/12">
+    <div class="mx-auto w-10/12">
         <h2 class="mt-5 text-yellow-400 uppercase text-lg font-semibold">
             Popular Movies
         </h2>
