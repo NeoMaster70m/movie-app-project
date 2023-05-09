@@ -27,13 +27,16 @@
             </div>
         </div>  
         <MovieCast />
+        <MovieImages />
     </div>
 </template>
 <script>
 import MovieCast from './MovieCast.vue'
+import MovieImages from './MovieImages.vue'
 export default {
     components:{
-        MovieCast
+        MovieCast,
+        MovieImages
     }
 }
 </script>

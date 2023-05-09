@@ -1,9 +1,11 @@
 <template lang="">
     <div class="flex mx-auto">
-        <img class="h-20" src="@/assets/images/logo.png" alt="">
+        <router-link to="/">
+            <img class="h-20" src="@/assets/images/logo.png" alt="" />
+        </router-link>
         <ul class="flex my-7">
             <li>
-                <router-link to="/movies" class="ml-5">
+                <router-link to="/" class="ml-5">
                     Movies
                 </router-link>
             </li>

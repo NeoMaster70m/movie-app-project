@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from './components/HomeView.vue'
-import MoviePage from './components/MoviePage.vue'
+import MoviePage from './components/movies/MoviePage.vue'
 
 Vue.use(VueRouter)
 
