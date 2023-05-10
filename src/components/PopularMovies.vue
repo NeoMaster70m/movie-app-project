@@ -1,6 +1,6 @@
 <template lang="">
     <div class="mx-auto w-10/12">
-        <h2 class="mt-5 text-yellow-400 uppercase text-lg font-semibold">
+        <h2 class="mt-5 text-yellow-400 uppercase text-2xl font-roboto-semibold mb-4">
             Popular Movies
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4">

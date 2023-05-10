@@ -1,14 +1,19 @@
 <template lang="">
     <div>
         <div class="container mx-auto flex mt-20 border-b border-gray-600 pb-2">
-            <img src="@/assets/images/batman.jpg" alt="" class="w-64">
+            <img :src="posterPath" alt="">
             <div class="ml-24">
-                <h1 class="text-4xl font-semibold">Batman</h1>
-                <span class="text-sm text-gray-400">
-                <i class="fas fa-star text-yellow-500 w-4 mr-1"></i>82% | 2022-10-01 Crime, Thriller, Drama</span>
-                <P class="mt-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at ante eget velit aliquet varius. Fusce sed purus porttitor, viverra massa eu, ultricies ipsum. Sed consectetur, nunc non hendrerit venenatis, odio sapien eleifend lorem, sit amet efficitur lectus enim vel odio. Ut tempus ante vel mauris consectetur faucibus. Nam gravida interdum tortor, eu efficitur velit elementum eget. Fusce laoreet turpis non quam tincidunt bibendum. Curabitur a vestibulum orci, eu ullamcorper neque. Aliquam quis odio ac massa congue varius ac id erat. Cras vehicula ipsum vel magna finibus, eget viverra velit luctus.</P>
-                <div class="mt-5">
-                    <span class="font-semibold">Featured Cast</span>
+                <h1 class="text-4xl font-semibold mb-2">{{this.movie.title}}</h1>
+                <span class="text-gray-400">
+                <i class="fas fa-star text-yellow-500 w-4 mr-1"></i>{{this.movie.vote_average * 10}}% | {{this.movie.release_date}}
+                    <span :key="index" v-for="(item, index) in movie.genres">
+                        {{item.name}}
+                        <span v-if="movie.genres.length - 1 != index">,</span>
+                    </span>
+                </span>
+                <P class="mt-5 text-lg font-medium">{{this.movie.overview}}</P>
+                <div class="mt-10">
+                    <span class="font-semibold text-2xl">Featured Cast:</span>
                     <div class="flex">
                         <div class="flex flex-col mt-5 mr-5">
                             <span>Scott Silver </span>
@@ -26,8 +31,8 @@
                 </div>
             </div>
         </div>  
-        <MovieCast />
-        <MovieImages />
+        <MovieCast :casts="movie.credits.cast" />
+        <MovieImages :images="movie.images.backdrops" />
     </div>
 </template>
 <script>
@@ -37,7 +42,27 @@ export default {
     components:{
         MovieCast,
         MovieImages
-    }
+    },
+    data () {
+        return {
+            movie: [],
+        }  
+    },
+    mounted () {
+        this.fetchMovie(this.$route.params.id)
+    },
+    methods: {
+        async fetchMovie(movieId) {
+            const response = await this.$http.get(
+                "/movie/" + movieId + "?append_to_response=credits,video,images")
+                this.movie = response.data
+        }
+    },
+    computed: {
+        posterPath() {
+            return "https://image.tmdb.org/t/p/w500/" + this.movie.poster_path;
+        }
+    },
 }
 </script>
 <style lang="">
