@@ -15,19 +15,19 @@
                 <div class="mt-10">
                     <span class="font-semibold text-2xl">Featured Cast:</span>
                     <div class="flex">
-                        <div class="flex flex-col mt-5 mr-5">
-                            <span>Scott Silver </span>
-                            <span class="text-gray-400">Writter</span>
-                        </div>
-                        <div class="flex flex-col mt-5">
-                            <span>Bruce Berman </span>
-                            <span class="text-gray-400">Executive Producer</span>
+                        <div :key="index" v-for="(crew, index) in movie.credits.crew">
+                            <div class="flex flex-col mt-5 mr-5" v-if="index < 2">
+                                <span>{{crew.name}}</span>
+                            <span class="text-gray-400">{{crew.job}} </span>
+                            </div>
                         </div>
                     </div>   
                 </div>
                 <div class="mt-10">
-                    <a href="" class="rounded bg-red-600 px-5 py-3 mr-5"><i class="fab fa-youtube text-lg mr-2"></i>Play Trailer</a>
-                    <a href="" class="rounded bg-yellow-500 px-5 py-3 text-black"><i class="fas fa-heart text-lg mr-2"></i>Favourite</a>
+                    <a :href="youtubeTrailerUrl" target="_blank" class="rounded bg-red-600 px-5 py-3 mr-5">
+                        <i class="fab fa-youtube text-lg mr-2"></i>Play Trailer
+                    </a>
+                    <a href="#" class="rounded bg-yellow-500 px-5 py-3 text-black"><i class="fas fa-heart text-lg mr-2"></i>Favourite</a>
                 </div>
             </div>
         </div>  
@@ -39,31 +39,56 @@
 import MovieCast from './MovieCast.vue'
 import MovieImages from './MovieImages.vue'
 export default {
-    components:{
+    components: {
         MovieCast,
         MovieImages
     },
-    data () {
+    data() {
         return {
-            movie: [],
-        }  
+        movie: {
+            credits: {
+            crew: {}
+            },
+            images: {
+            backdrops: {}
+            },
+            videos: {
+            results: []
+            }
+        }
+        }
     },
-    mounted () {
+    mounted() {
         this.fetchMovie(this.$route.params.id)
     },
     methods: {
         async fetchMovie(movieId) {
-            const response = await this.$http.get(
-                "/movie/" + movieId + "?append_to_response=credits,video,images")
-                this.movie = response.data
+        const response = await this.$http.get(
+            "/movie/" + movieId + "?append_to_response=credits,videos,images"
+        );
+        this.movie = response.data;
         }
     },
     computed: {
         posterPath() {
-            return "https://image.tmdb.org/t/p/w500/" + this.movie.poster_path;
+        return "https://image.tmdb.org/t/p/w500/" + this.movie.poster_path;
+        },
+        youtubeTrailerUrl() {
+        if (this.movie.videos && this.movie.videos.results) {
+            const trailer = this.movie.videos.results.find(
+            video => video.type === "Trailer"
+            );
+            if (trailer) {
+            return `https://www.youtube.com/watch?v=${trailer.key}`;
+            }
         }
-    },
-}
+        return "";
+        },
+        youtubeVideo() {
+        return this.youtubeTrailerUrl;
+        }
+    }
+};
 </script>
 <style lang="">
     
