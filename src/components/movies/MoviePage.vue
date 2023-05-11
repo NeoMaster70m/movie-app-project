@@ -24,7 +24,7 @@
                     </div>   
                 </div>
                 <div class="mt-10">
-                    <a :href="youtubeTrailerUrl" target="_blank" class="rounded bg-red-600 px-5 py-3 mr-5">
+                    <a @click.prevent="modelOpen=true" target="_blank" class="rounded bg-red-600 px-5 py-3 mr-5">
                         <i class="fab fa-youtube text-lg mr-2"></i>Play Trailer
                     </a>
                     <a href="#" class="rounded bg-yellow-500 px-5 py-3 text-black"><i class="fas fa-heart text-lg mr-2"></i>Favourite</a>
@@ -33,29 +33,33 @@
         </div>  
         <MovieCast :casts="movie.credits.cast" />
         <MovieImages :images="movie.images.backdrops" />
+        <MediaModel v-model="modelOpen" :mediaURL="youtubeTrailerUrl" />
     </div>
 </template>
 <script>
 import MovieCast from './MovieCast.vue'
 import MovieImages from './MovieImages.vue'
+import MediaModel from '../models/MediaModel.vue'
 export default {
     components: {
         MovieCast,
-        MovieImages
+        MovieImages,
+        MediaModel
     },
     data() {
         return {
-        movie: {
-            credits: {
-            crew: {}
+            movie: {
+                credits: {
+                crew: {}
+                },
+                images: {
+                backdrops: {}
+                },
+                videos: {
+                results: []
+                }
             },
-            images: {
-            backdrops: {}
-            },
-            videos: {
-            results: []
-            }
-        }
+            modelOpen: false,
         }
     },
     mounted() {
@@ -76,16 +80,16 @@ export default {
         youtubeTrailerUrl() {
         if (this.movie.videos && this.movie.videos.results) {
             const trailer = this.movie.videos.results.find(
-            video => video.type === "Trailer"
+                video => video.type === "Trailer"
             );
             if (trailer) {
-            return `https://www.youtube.com/watch?v=${trailer.key}`;
+                return `https://www.youtube.com/embed/${trailer.key}`;
             }
         }
         return "";
-        },
-        youtubeVideo() {
-        return this.youtubeTrailerUrl;
+    },
+            youtubeVideo() {
+            return this.youtubeTrailerUrl;
         }
     }
 };
