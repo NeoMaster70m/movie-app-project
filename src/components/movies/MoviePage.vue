@@ -65,6 +65,13 @@ export default {
     mounted() {
         this.fetchMovie(this.$route.params.id)
     },
+    watch: {
+        "$route.params.id": {
+            handler() {
+                this.fetchMovie(this.$route.params.id)
+            }
+        }
+    },
     methods: {
         async fetchMovie(movieId) {
         const response = await this.$http.get(

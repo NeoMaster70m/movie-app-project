@@ -1,7 +1,7 @@
 <template>
     <div class="banner-container mt-20">
     <h2 class="mt-5 text-center text-yellow-400 uppercase text-4xl font-roboto-semibold mb-5">Now Playing Movies</h2>
-    <carousel :autoplay="true" :autoplay-timeout="2000" :per-page="1" :loop="true" :navigation-enabled="true">
+    <carousel :autoplay="true" :autoplay-timeout="5000" :per-page="1" :loop="true" :navigation-enabled="true">
         <slide v-for="movie in movies" :key="movie.id">
         <div class="slide-content">
             <router-link :to="`/movie/${movie.id}`">
