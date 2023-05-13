@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from './components/HomeView.vue'
+import HomeView from './components/front/HomeView.vue'
 import MoviePage from './components/movies/MoviePage.vue'
 import MovieActors from './components/actors/MovieActors.vue'
 import ActorDetail from './components/actors/ActorDetail.vue'
