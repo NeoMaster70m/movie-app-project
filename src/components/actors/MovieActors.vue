@@ -7,8 +7,8 @@
             <ActorItems :key="actor.id" v-for="actor in this.actors" :actor="actor" />
         </div>
         <div class="flex justify-center my-6">
-            <button @click="prevPage" :disabled="currentPage === 1" class="mx-1 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-yellow-400 hover:text-black transition-colors ease-in-out duration-200">Prev</button>
-            <button @click="nextPage" class="mx-1 px-4 py-2 bg-yellow-400 text-black rounded-md hover:bg-gray-500 hover:text-white transition-colors ease-in-out duration-200">Next</button>
+            <button @click="prevPage" :disabled="currentPage === 1" class="actors_btn mx-1 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-yellow-400 hover:text-black transition-colors ease-in-out duration-200">Prev</button>
+            <button @click="nextPage" class="actors_btn mx-1 px-4 py-2 bg-yellow-400 text-black rounded-md hover:bg-gray-500 hover:text-white transition-colors ease-in-out duration-200">Next</button>
         </div>
     </div>
 </template>
@@ -52,11 +52,11 @@ export default {
 </script>
 
 <style>
-button[disabled] {
+.actors_btn[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
 }
-button {
+.actors_btn {
     background-color: #ffc107;
     color: #000;
     border: none;
@@ -70,7 +70,7 @@ button {
     cursor: pointer;
     border-radius: 12px;
 }
-button:hover {
+.actors_btn:hover {
     background-color: #d4a307;
     color: white;
 }

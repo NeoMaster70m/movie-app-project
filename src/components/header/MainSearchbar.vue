@@ -29,11 +29,15 @@
                 <li>No results found for "{{searchTerm}}"</li>
             </ul>
         </div>
-        <img src="@/assets/images/avatar.jpg" alt="" class="h-10 rounded-full">
+        <AccountMenu />
     </div> 
 </template>
 <script>
+import AccountMenu from './AccountMenu.vue';
 export default {
+    components: {
+        AccountMenu
+    },
     data() {
         return {
             searchResult: [],
