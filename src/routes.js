@@ -4,6 +4,9 @@ import HomeView from './components/front/HomeView.vue'
 import MoviePage from './components/movies/MoviePage.vue'
 import MovieActors from './components/actors/MovieActors.vue'
 import ActorDetail from './components/actors/ActorDetail.vue'
+import RegisterComponent from '@/components/profile/RegisterComponent.vue'
+import LoginComponent from '@/components/profile/LoginComponent.vue'
+import ProfilePage from '@/components/profile/ProfilePage.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +31,21 @@ const routes = [
     name: 'Actor',
     component: ActorDetail
   },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterComponent
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginComponent
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: ProfilePage
+  }
 ]
 
 const router = new VueRouter({
