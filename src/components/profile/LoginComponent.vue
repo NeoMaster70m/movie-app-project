@@ -31,27 +31,30 @@ import axios from 'axios';
 export default {
     data() {
         return {
-        username: '',
-        password: '',
+            username: '',
+            password: ''
         };
     },
     methods: {
         async login() {
-        try {
-            const response = await axios.post('http://localhost:3000/login', {
-            username: this.username,
-            password: this.password,
-            });
-
-            // Сохраняем токен в localStorage
-            localStorage.setItem('authToken', response.data.token);
-
-            // Перенаправляем пользователя на страницу профиля
-            this.$router.push('/profile');
-        } catch (error) {
-            console.error(error);
+            try {
+                const response = await axios.post('http://localhost:3000/login', {
+                    username: this.username,
+                    password: this.password
+                });
+                if (response.data.error) {
+                    window.alert('Invalid username or password.');
+                    return;
+                }
+                console.log(response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
+                this.$router.push('/profile');
+            } catch (error) {
+                console.error(error);
+                window.alert('Login failed. Please check your input and try again.');
+            }
         }
-        },
-    },
+    }
 };
 </script>
+

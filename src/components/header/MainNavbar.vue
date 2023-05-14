@@ -15,18 +15,35 @@
                 </router-link>
             </li>
             <li>
-                <router-link to="/profile" class="ml-5">
+                <router-link v-if="isLoggedIn" to="/profile" class="ml-5">
                     Profile
+                </router-link>
+                <router-link v-else to="/login" class="ml-5">
+                    Login
                 </router-link>
             </li>
         </ul>
     </div>
 </template>
+
 <script>
 export default {
-    
-}
+    data() {
+        return {
+            isLoggedIn: false,
+        };
+    },
+    mounted() {
+        this.checkSession();
+    },
+    methods: {
+        checkSession() {
+            const user = JSON.parse(localStorage.getItem("user"));
+            this.isLoggedIn = !!user;
+        },
+    },
+};
 </script>
+
 <style lang="">
-    
 </style>

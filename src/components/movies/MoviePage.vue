@@ -27,7 +27,11 @@
                     <a @click.prevent="modelOpen=true" target="_blank" class="rounded bg-red-600 px-5 py-3 text-white flex items-center">
                         <i class="fab fa-youtube text-lg mr-2"></i>Play Trailer
                     </a>
-                    <a href="#" class="rounded bg-yellow-500 px-5 py-3 text-black flex items-center"><i class="fas fa-heart text-lg mr-2"></i>Favourite</a>
+                    <a href="#" class="rounded bg-yellow-500 px-5 py-3 text-black flex items-center"
+                    @click.prevent="toggleFavorite"
+                    :class="{ 'bg-red-500': isFavorite }">
+                    <i class="fas fa-heart text-lg mr-2"></i>Favorite
+                </a>
                 </div>
             </div>
         </div>  
@@ -61,10 +65,13 @@ export default {
                 }
             },
             modelOpen: false,
+            isFavorite: false,
         }
     },
     mounted() {
-        this.fetchMovie(this.$route.params.id)
+        this.fetchMovie(this.$route.params.id);
+        this.fetchMovie(this.$route.params.id);
+        this.checkIsFavorite();
     },
     watch: {
         "$route.params.id": {
@@ -79,7 +86,27 @@ export default {
             "/movie/" + movieId + "?append_to_response=credits,videos,images"
         );
         this.movie = response.data;
-        }
+        },
+        checkIsFavorite() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                const favorites = JSON.parse(localStorage.getItem(`favorites_${user.id}`)) || [];
+                this.isFavorite = favorites.includes(this.movie.id);
+            }
+        },
+        toggleFavorite() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                let favorites = JSON.parse(localStorage.getItem(`favorites_${user.id}`)) || [];
+                if (this.isFavorite) {
+                    favorites = favorites.filter(id => id !== this.movie.id);
+                } else {
+                    favorites.push(this.movie.id);
+                }
+                localStorage.setItem(`favorites_${user.id}`, JSON.stringify(favorites));
+                this.isFavorite = !this.isFavorite;
+            }
+        },
     },
     computed: {
         posterPath() {

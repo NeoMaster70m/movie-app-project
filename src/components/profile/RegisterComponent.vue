@@ -36,25 +36,28 @@ import axios from 'axios';
 
 export default {
     data() {
-    return {
-        username: '',
-        password: '',
-        email: '',
-    };
+        return {
+            username: '',
+            email: '',
+            password: ''
+        };
     },
     methods: {
-    async register() {
+        async register() {
             try {
-            await axios.post('http://localhost:3000/register', {
-                username: this.username,
-                password: this.password,
-                email: this.email,
-            });
-            this.$router.push('/login');
+                const response = await axios.post('http://localhost:3000/register', {
+                    username: this.username,
+                    email: this.email,
+                    password: this.password
+                });
+                console.log(response.data);
+                localStorage.setItem('user', JSON.stringify(response.data));
+                this.$router.push('/profile');
             } catch (error) {
-            console.error(error);
+                console.error(error);
+                window.alert('Registration failed. Please check your input and try again.');
             }
-        },
-    },
+        }
+    }
 };
 </script>
