@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-center items-center bg-black">
         <div class="w-full max-w-xl p-4">
         <h2 class="text-center text-yellow-400 uppercase text-4xl font-bold mb-10">Profile</h2>
-        <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex items-center gap-8">
+        <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center gap-6">
             <div v-if="!photo" class="w-64 h-64 relative cursor-pointer bg-purple-200 rounded mb-4">
             <input type="file" class="w-full h-full opacity-0 cursor-pointer absolute left-0 top-0" @change="uploadPhoto">
             <div class="flex items-center justify-center w-full h-full">

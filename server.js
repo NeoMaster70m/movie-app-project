@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(cors());
@@ -27,7 +28,15 @@ app.post('/register', async (req, res) => {
         return res.status(400).send('User with given username or email already exists');
     }
 
-    const user = new User(req.body);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const user = new User({
+        username: req.body.username,
+        password: hashedPassword,
+        email: req.body.email,
+        profilePicture: req.body.profilePicture,
+        favorites: req.body.favorites,
+    });
     try {
         await user.save();
         res.send(user);
@@ -42,7 +51,8 @@ app.post('/login', async (req, res) => {
         return res.status(400).send('Invalid username or password');
     }
 
-    if (user.password !== req.body.password) {
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) {
         return res.status(400).send('Invalid username or password');
     }
     res.send(user);
