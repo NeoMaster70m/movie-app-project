@@ -16,20 +16,21 @@
 export default {
     created() {
         const handleEscape = (e) => {
-        if (e.key == "Esc" || e.key == "Escape") {
-            this.isOpen = false;
-        }
+            if (e.key == "Esc" || e.key == "Escape") {
+                this.isOpen = false;
+            }
         };
         document.addEventListener("keydown", handleEscape);
         this.$once("hook:beforeDestroy", () => {
-        document.addEventListener("keydown", handleEscape);
+            document.removeEventListener("keydown", handleEscape);
         });
     },
     data() {
         return {
-        isOpen: false,
-        isLoggedIn: false,
-        photo: null,
+            isOpen: false,
+            isLoggedIn: false,
+            photo: null,
+            user: null
         };
     },
     mounted() {
@@ -38,22 +39,26 @@ export default {
     },
     methods: {
         checkSession() {
-        const user = JSON.parse(localStorage.getItem("user"));
-        this.isLoggedIn = !!user;
+            const user = JSON.parse(localStorage.getItem("user"));
+            this.isLoggedIn = !!user;
+            this.user = user;
         },
         loadPhoto() {
-        this.photo = localStorage.getItem('photo');
+            if (this.user) {
+                this.photo = localStorage.getItem(`photo_${this.user.id}`);
+            }
         },
         logout() {
-        localStorage.removeItem('user');
-        localStorage.removeItem('photo');
-        this.isLoggedIn = false;
-        this.photo = null;
-        this.$router.push('/login');
+            localStorage.removeItem(`photo_${this.user.id}`);
+            localStorage.removeItem('user');
+            this.isLoggedIn = false;
+            this.photo = null;
+            this.$router.push('/login');
         }
     },
 };
 </script>
 
 <style lang="">
+
 </style>

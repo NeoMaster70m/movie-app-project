@@ -19,7 +19,7 @@
                     Profile
                 </router-link>
                 <router-link v-else to="/login" class="ml-5">
-                    Login
+                    Profile
                 </router-link>
             </li>
         </ul>

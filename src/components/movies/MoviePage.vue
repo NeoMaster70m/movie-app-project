@@ -27,11 +27,14 @@
                     <a @click.prevent="modelOpen=true" target="_blank" class="rounded bg-red-600 px-5 py-3 text-white flex items-center">
                         <i class="fab fa-youtube text-lg mr-2"></i>Play Trailer
                     </a>
-                    <a href="#" class="rounded bg-yellow-500 px-5 py-3 text-black flex items-center"
+                    <a href="#" class="rounded px-5 py-3 flex items-center"
                     @click.prevent="toggleFavorite"
-                    :class="{ 'bg-red-500': isFavorite }">
-                    <i class="fas fa-heart text-lg mr-2"></i>Favorite
-                </a>
+                    :class="{ 'bg-red-500': isFavorite, 'bg-yellow-500': !isFavorite, }"
+                    :disabled="!user">
+                        <i class="fas fa-heart text-lg mr-2"></i>
+                        <span v-if="isFavorite">Unfavorite</span>
+                        <span v-else>Favorite</span>
+                    </a>
                 </div>
             </div>
         </div>  
@@ -70,7 +73,6 @@ export default {
     },
     mounted() {
         this.fetchMovie(this.$route.params.id);
-        this.fetchMovie(this.$route.params.id);
         this.checkIsFavorite();
     },
     watch: {
@@ -82,10 +84,15 @@ export default {
     },
     methods: {
         async fetchMovie(movieId) {
-        const response = await this.$http.get(
-            "/movie/" + movieId + "?append_to_response=credits,videos,images"
-        );
-        this.movie = response.data;
+            const response = await this.$http.get(
+                "/movie/" + movieId + "?append_to_response=credits,videos,images"
+            );
+            this.movie = response.data;
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                let favorites = JSON.parse(localStorage.getItem(`favorites_${user.id}`)) || [];
+                this.isFavorite = favorites.includes(this.movie.id);
+            }
         },
         checkIsFavorite() {
             const user = JSON.parse(localStorage.getItem('user'));

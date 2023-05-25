@@ -2,7 +2,7 @@
     <div class="flex flex-col justify-center items-center bg-black">
         <div class="w-full max-w-xl p-4">
         <h2 class="text-center text-yellow-400 uppercase text-4xl font-bold mb-10">Profile</h2>
-        <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col items-center">
+        <div class="bg-gray-800 shadow-md rounded px-8 pt-6 pb-8 mb-4 flex items-center gap-8">
             <div v-if="!photo" class="w-64 h-64 relative cursor-pointer bg-purple-200 rounded mb-4">
             <input type="file" class="w-full h-full opacity-0 cursor-pointer absolute left-0 top-0" @change="uploadPhoto">
             <div class="flex items-center justify-center w-full h-full">
@@ -10,7 +10,26 @@
             </div>
             </div>
             <img v-else :src="photo" class="w-64 h-64 object-cover rounded mb-4" />
-            <div class="flex flex-col w-full mb-4 space-y-4">
+            <div class="flex flex-col w-full mb-4 space-y-4"> 
+                <div class="mt-2 mx-auto flex flex-col gap-4">
+                    <button 
+                    type="button" 
+                    @click="removePhoto" 
+                    class="bg-yellow-500 hover:bg-yellow-300 text-black font-bold py-2 px-4 rounded mt-2"
+                >
+                    Remove Photo
+                </button>
+                    <label 
+                        class="bg-yellow-500 hover:bg-yellow-300 text-black font-bold py-2 px-4 rounded cursor-pointer inline-block"
+                    >
+                        Change Photo
+                        <input 
+                            type="file" 
+                            class="hidden"
+                            @change="changePhoto"
+                        >
+                    </label>
+                </div>
             <div>
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
                 Username
@@ -24,7 +43,7 @@
                 <p class="text-gray-300 text-lg font-bold">{{ email }}</p>
             </div>
             <div class="mx-auto">
-                <button class="bg-yellow-500 hover:bg-yellow-300 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="logout">
+                <button class="bg-red-500 hover:bg-red-700 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" @click="logout">
                 Logout
                 </button>
             </div> 
@@ -66,26 +85,42 @@ export default {
             this.email = user.email;
 
             const favorites = JSON.parse(localStorage.getItem(`favorites_${user.id}`)) || [];
+            this.favoriteMovies = [];
             for (let i = 0; i < favorites.length; i++) {
                 const response = await this.$http.get(`/movie/${favorites[i]}`);
                 this.favoriteMovies.push(response.data);
             }
         }
-        this.photo = localStorage.getItem('photo');
+        this.photo = localStorage.getItem(`photo_${user.id}`);
     },
     methods: {
-            uploadPhoto(event) {
+        uploadPhoto(event) {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const file = event.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            this.photo = e.target.result;
+            localStorage.setItem(`photo_${user.id}`, this.photo);
+        };
+        },
+        removePhoto() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            this.photo = null;
+            localStorage.removeItem(`photo_${user.id}`);
+        },
+        changePhoto(event) {
+            const user = JSON.parse(localStorage.getItem('user'));
             const file = event.target.files[0];
             let reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = e => {
                 this.photo = e.target.result;
-                localStorage.setItem('photo', this.photo);
+                localStorage.setItem(`photo_${user.id}`, this.photo);
             };
         },
         logout() {
             localStorage.removeItem('user');
-            localStorage.removeItem('photo');
             this.$router.push('/login');
         }
     },
